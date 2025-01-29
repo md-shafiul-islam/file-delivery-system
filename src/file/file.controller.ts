@@ -19,11 +19,29 @@ export class FileController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file: Express.Multer.File, @Res() res) {
     const uploadResponse = await this.fileServices.uploadFile(file);
-    return res.json({ fileUrl: uploadResponse.Location });
+    return res.json({ fileUrl: uploadResponse });
   }
 
-  @Get('signed-url')
+  @Get('download-url')
   async getSignedUrl(@Query('fileKey') fileKey: string) {
-    return this.fileServices.generateSignedUrl(fileKey);
+    return this.fileServices.generateDownloadUrl(fileKey);
+  }
+
+  @Get('upload-url')
+  async getUploadUrl(
+    @Query('fileKey') fileKey: string,
+    @Query('contentType') contentType: string,
+    @Res() res,
+  ) {
+    try {
+      const uploadUrl = await this.fileServices.generateUploadUrl(
+        fileKey,
+        contentType,
+      );
+      return res.status(200).json({ uploadUrl });
+    } catch (error) {
+      console.error('Generate upload URL error:', error);
+      return res.status(500).json({ error: 'Failed to generate upload URL' });
+    }
   }
 }
