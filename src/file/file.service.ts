@@ -34,6 +34,8 @@ export class FileService {
   };
 
   async generateSignedUrl(fileKey: string) {
+
+    
     return this.s3.getSignedUrlPromise('getObject', {
       Bucket: this.bucketName,
       Key: fileKey,

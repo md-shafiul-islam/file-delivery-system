@@ -3,13 +3,13 @@ import {
   Get,
   Post,
   Query,
+  Res,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './file.service';
 import { Express } from 'express';
-import { Multer } from 'multer';
 
 @Controller('file')
 export class FileController {
@@ -17,13 +17,13 @@ export class FileController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+  async uploadFile(@UploadedFile() file: Express.Multer.File, @Res() res) {
     const uploadResponse = await this.fileServices.uploadFile(file);
-    return { fileUrl: uploadResponse.Location };
+    return res.json({ fileUrl: uploadResponse.Location });
   }
 
   @Get('signed-url')
   async getSignedUrl(@Query('fileKey') fileKey: string) {
-    const url = await this.fileServices.generateSignedUrl(fileKey);
+    return this.fileServices.generateSignedUrl(fileKey);
   }
 }
