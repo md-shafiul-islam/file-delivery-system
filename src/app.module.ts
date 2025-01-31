@@ -9,9 +9,10 @@ import { UsersModule } from './users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './roles/roles.guard';
 import { AuthModule } from './auth/auth.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
-  imports: [FileModule, ChatsModule, AgentsModule, UsersModule, AuthModule],
+  imports: [FileModule, ChatsModule, AgentsModule, UsersModule, AuthModule, PaymentsModule],
   controllers: [AppController],
   providers: [
     AppService,
