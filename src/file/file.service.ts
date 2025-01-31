@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { v4 as uuidv4 } from 'uuid';
 import * as crypto from 'crypto';
 import * as fs from 'fs';
-import knex from 'src/db/knexfile';
+import knex from 'src/db/knex.db';
 
 @Injectable()
 export class FileService {

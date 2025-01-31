@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { config } from 'dotenv';
 config();
 
-import knex from './db/knexfile';
+import knex from './db/knex.db';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

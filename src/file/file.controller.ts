@@ -14,6 +14,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FileService } from './file.service';
 import { Express, Response } from 'express';
 import * as crypto from 'crypto';
+import { createReadStream } from 'fs';
+import * as path from 'path';
 
 @Controller('file')
 export class FileController {
@@ -24,6 +26,19 @@ export class FileController {
   async uploadFile(@UploadedFile() file: Express.Multer.File, @Res() res) {
     const uploadResponse = await this.fileServices.uploadFile(file);
     return res.json({ fileUrl: uploadResponse });
+  }
+
+  //File Store in local store
+  @Get('stream')
+  streamFile(@Query('fileKey') fileKey: string, @Res() res: Response) {
+    const filePath = path.join(__dirname, '../../uploads/', fileKey);
+
+    const fileStream = createReadStream(filePath); // Stream instead of loading
+
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileKey}"`);
+
+    fileStream.pipe(res);
   }
 
   @Post('download-url')
