@@ -17,15 +17,16 @@ export class ChatsService {
       fileKey: string;
     },
   ) {
+    console.log('Use Message ', file);
     return knexDB('messages')
       .insert({
         chat_id: chatId,
         sender_id: senderId,
         content,
-        file_url: file.fileUrl || null,
-        file_name: file.fileName || null,
-        file_type: file.fileType || null,
-        file_key: file.fileKey || null,
+        file_url: file?.fileUrl || null,
+        file_name: file?.fileName || null,
+        file_type: file?.fileType || null,
+        file_key: file?.fileKey || null,
       })
       .returning('*');
   }
@@ -43,13 +44,15 @@ export class ChatsService {
   }
 
   async createChat(customerId: string) {
+    const activeAgent = await knexDB('agent').where({ active: true }).first();
     const chat = knexDB('chats')
       .insert({
         customer_id: customerId,
+        agent_id: activeAgent?.id,
         active: true,
       })
       .returning('*');
-    console.log('Create Chart, ', chat);
+
     return chat;
   }
 

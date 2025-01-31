@@ -3,7 +3,7 @@ import { ChatsService } from './chats.service';
 
 @Controller('chats')
 export class ChatsController {
-  constructor(private chatService: ChatsService) {}
+  constructor(private readonly chatService: ChatsService) {}
 
   @Get(':chatId/messages')
   async getMessages(@Param('chatId') chatId: string) {

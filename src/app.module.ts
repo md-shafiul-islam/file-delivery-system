@@ -3,14 +3,20 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { FileModule } from './file/file.module';
 import { FileUploadGateway } from './file-upload/file-upload.gateway';
-import { MessagesModule } from './messages/messages.module';
 import { ChatsModule } from './chats/chats.module';
 import { AgentsModule } from './agents/agents.module';
 import { UsersModule } from './users/users.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './roles/roles.guard';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [FileModule, MessagesModule, ChatsModule, AgentsModule, UsersModule],
+  imports: [FileModule, ChatsModule, AgentsModule, UsersModule, AuthModule],
   controllers: [AppController],
-  providers: [AppService, FileUploadGateway],
+  providers: [
+    AppService,
+    FileUploadGateway,
+    { provide: APP_GUARD, useClass: RolesGuard },
+  ],
 })
 export class AppModule {}
